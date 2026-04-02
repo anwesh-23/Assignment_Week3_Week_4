@@ -1,35 +1,35 @@
 class Assignment_3_4 {
 
-    static class Client {
-        String name;
-        int risk;
-
-        Client(String n, int r) {
-            name = n;
-            risk = r;
+    static void mergeSort(int[] arr, int l, int r) {
+        if (l < r) {
+            int m = (l + r) / 2;
+            mergeSort(arr, l, m);
+            mergeSort(arr, m + 1, r);
+            merge(arr, l, m, r);
         }
     }
 
-    static void bubbleSort(Client[] arr) {
-        for (int i = 0; i < arr.length - 1; i++)
-            for (int j = 0; j < arr.length - i - 1; j++)
-                if (arr[j].risk > arr[j + 1].risk) {
-                    Client temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
+    static void merge(int[] arr, int l, int m, int r) {
+        int[] temp = new int[r - l + 1];
+        int i = l, j = m + 1, k = 0;
+
+        while (i <= m && j <= r) {
+            if (arr[i] <= arr[j]) temp[k++] = arr[i++];
+            else temp[k++] = arr[j++];
+        }
+
+        while (i <= m) temp[k++] = arr[i++];
+        while (j <= r) temp[k++] = arr[j++];
+
+        for (i = l, k = 0; i <= r; i++, k++)
+            arr[i] = temp[k];
     }
 
     public static void main(String[] args) {
-        Client[] arr = {
-                new Client("A", 20),
-                new Client("B", 50),
-                new Client("C", 80)
-        };
+        int[] arr = {500, 100, 300};
+        mergeSort(arr, 0, arr.length - 1);
 
-        bubbleSort(arr);
-
-        for (Client c : arr)
-            System.out.println(c.name + " " + c.risk);
+        for (int x : arr)
+            System.out.print(x + " ");
     }
 }
