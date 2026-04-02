@@ -1,35 +1,48 @@
+import java.util.*;
+
 class Assignment_3_4 {
 
-    static void mergeSort(int[] arr, int l, int r) {
-        if (l < r) {
-            int m = (l + r) / 2;
-            mergeSort(arr, l, m);
-            mergeSort(arr, m + 1, r);
-            merge(arr, l, m, r);
+    static class Asset {
+        String name;
+        double rate;
+
+        Asset(String n, double r) {
+            name = n;
+            rate = r;
         }
     }
 
-    static void merge(int[] arr, int l, int m, int r) {
-        int[] temp = new int[r - l + 1];
-        int i = l, j = m + 1, k = 0;
-
-        while (i <= m && j <= r) {
-            if (arr[i] <= arr[j]) temp[k++] = arr[i++];
-            else temp[k++] = arr[j++];
+    static void quickSort(List<Asset> list, int low, int high) {
+        if (low < high) {
+            int pi = partition(list, low, high);
+            quickSort(list, low, pi - 1);
+            quickSort(list, pi + 1, high);
         }
+    }
 
-        while (i <= m) temp[k++] = arr[i++];
-        while (j <= r) temp[k++] = arr[j++];
+    static int partition(List<Asset> list, int low, int high) {
+        double pivot = list.get(high).rate;
+        int i = low - 1;
 
-        for (i = l, k = 0; i <= r; i++, k++)
-            arr[i] = temp[k];
+        for (int j = low; j < high; j++) {
+            if (list.get(j).rate > pivot) {
+                i++;
+                Collections.swap(list, i, j);
+            }
+        }
+        Collections.swap(list, i + 1, high);
+        return i + 1;
     }
 
     public static void main(String[] args) {
-        int[] arr = {500, 100, 300};
-        mergeSort(arr, 0, arr.length - 1);
+        List<Asset> list = new ArrayList<>();
+        list.add(new Asset("AAPL", 12));
+        list.add(new Asset("TSLA", 8));
+        list.add(new Asset("GOOG", 15));
 
-        for (int x : arr)
-            System.out.print(x + " ");
+        quickSort(list, 0, list.size() - 1);
+
+        for (Asset a : list)
+            System.out.println(a.name + " " + a.rate);
     }
 }
